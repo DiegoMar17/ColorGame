@@ -2,47 +2,243 @@
     ViewData["Title"] = "Stack Tecnológico";
 }
 
-<div class="game-container glass-card p-4 p-md-5 mx-auto text-light animate-in mt-4" style="max-width: 850px;">
+<div class="game-container glass-card p-4 p-md-5 mx-auto text-light animate-in mt-4 mb-4" style="max-width: 950px;">
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold neon-text-cyan tracking-wide mb-3">🛠️ STACK TECNOLÓGICO</h1>
-        <p class="text-light opacity-75 fs-5">Las tecnologías que hacen posible la magia interactiva de CronoColor</p>
+        <p class="text-light opacity-75 fs-5 mx-auto" style="max-width: 600px;">Un análisis completo de las tecnologías que dan vida a CronoColor — un juego multijugador interactivo en tiempo real.</p>
     </div>
 
+    <!-- SECCION 1: BACKEND -->
+    <h5 class="text-uppercase tracking-wide opacity-50 mb-4 border-bottom border-light border-opacity-10 pb-3">🔧 BACKEND Y SERVIDOR</h5>
     <div class="row g-4 mb-5">
         <div class="col-md-6">
             <div class="glass-inner p-4 h-100 border-start border-4 border-info">
-                <h4 class="neon-text-cyan fw-bold mb-3">Backend & MVC Core</h4>
-                <ul class="list-unstyled text-light opacity-75">
-                    <li class="mb-3"><strong>.NET 8 & C# 12:</strong> El framework multiplataforma moderno de Microsoft forma el cimiento de la aplicación por su alto rendimiento y tipado fuerte seguro.</li>
-                    <li class="mb-0"><strong>ASP.NET Core MVC:</strong> Sirve como el controlador de rutas y presenta las vistas utilizando Razor Engine de forma ultrarrápida.</li>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="fs-2">⚡</span>
+                    <div>
+                        <h4 class="fw-bold neon-text-cyan mb-0">.NET 8</h4>
+                        <small class="opacity-50">Runtime & Plataforma</small>
+                    </div>
+                </div>
+                <p class="opacity-75 small mb-2">El motor de ejecución sobre el que vive la aplicación. .NET 8 es la última versión con <strong>soporte extendido (LTS)</strong> de Microsoft, con tiempos de inicio ~40% más rápidos que .NET Core 3.1.</p>
+                <ul class="small opacity-75">
+                    <li>Compilación AOT (Ahead-of-Time) para mayor rendimiento.</li>
+                    <li>Compatibilidad multiplataforma: Windows, Linux, macOS.</li>
+                    <li>Gestión automática de memoria via <strong>Garbage Collector</strong>.</li>
                 </ul>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="glass-inner p-4 h-100 border-start border-4 border-warning">
-                <h4 class="neon-text-yellow fw-bold mb-3">Lógica en Tiempo Real</h4>
-                <p class="text-light opacity-75"><strong>Microsoft SignalR:</strong> Es el corazón interactivo de CronoColor. Esta librería en base a <em>Transmisión por WebSockets</em> permite gestionar los turnos, generar estados globalizados y compartir tiempos entre jugadores instantáneamente sin recargar la página (Cero sondeos).</p>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="glass-inner p-4 border-start border-4 border-danger">
-                <h4 class="neon-text-pink fw-bold mb-3">Frontend Visual</h4>
-                <p class="text-light opacity-75 mb-3"><strong>Glassmorphism (El estilo "Esmerilado"):</strong> La interfaz renuncia a los diseños plásticos sólidos, aprovechando capacidades de aceleración de renderizado CSS modernas uniendo <em>backdrop-filters</em> para emular desenfoques de cristales sobre un fondo abstracto dinámico.</p>
-                <ul class="mb-0 list-unstyled text-light opacity-75">
-                    <li class="mb-2"><strong>Bootstrap 5:</strong> Sistema responsivo que facilita enormemente el posicionamiento global (Grillas flex).</li>
-                    <li><strong>Vanilla JavaScript (ES6):</strong> Manipulación de subprocesos y cronómetros de reloj exactos para prevenir cuellos de botella en la red. Renderizado asíncrono limpio mediante iteraciones del DOM.</li>
+            <div class="glass-inner p-4 h-100 border-start border-4 border-info">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="fs-2">🏗️</span>
+                    <div>
+                        <h4 class="fw-bold neon-text-cyan mb-0">ASP.NET Core MVC</h4>
+                        <small class="opacity-50">Framework de Presentación</small>
+                    </div>
+                </div>
+                <p class="opacity-75 small mb-2">El patrón Modelo-Vista-Controlador estructura la webapp separando claramente la lógica de negocio, los datos y la presentación visual.</p>
+                <ul class="small opacity-75">
+                    <li><strong>Razor Engine:</strong> Genera HTML dinámico desde las vistas <code>.cshtml</code>.</li>
+                    <li><strong>HomeController:</strong> Sirve las rutas <code>/</code> e <code>/Info</code>.</li>
+                    <li>Middleware pipeline para HTTP/HTTPS, estáticos y autorización.</li>
                 </ul>
             </div>
         </div>
-        <div class="col-12 text-center mt-4">
-            <div class="glass-inner d-inline-block px-4 py-3 border-secondary border-opacity-25" style="background: rgba(255,255,255,0.02)">
-                <span class="fs-5">☁️ No se utiliza base de datos para retener persistencia.</span><br/>
-                <small class="opacity-50">El ciclo de vida del lobby ocurre dentro de la RAM usando un <strong>Servicio Singleton Thread-safe</strong> en el servidor protegido por cláusulas atómicas <kbd>lock ()</kbd>.</small>
+        <div class="col-md-6">
+            <div class="glass-inner p-4 h-100 border-start border-4 border-info">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="fs-2">🔒</span>
+                    <div>
+                        <h4 class="fw-bold neon-text-cyan mb-0">C# 12</h4>
+                        <small class="opacity-50">Lenguaje de Programación</small>
+                    </div>
+                </div>
+                <p class="opacity-75 small mb-2">Lenguaje fuertemente tipado orientado a objetos. Moderno con funciones como <em>nullable reference types</em>, propiedades auto-inicializadas y expresiones de patrones.</p>
+                <ul class="small opacity-75">
+                    <li><strong>LINQ:</strong> Para proyectar y ordenar listas de jugadores con sintaxis declarativa.</li>
+                    <li><strong>Generics:</strong> Tipado fuerte en diccionarios y listas (<code>Dictionary&lt;string, List&lt;string&gt;&gt;</code>).</li>
+                    <li><strong>async/await:</strong> En todos los métodos del SignalR Hub.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="glass-inner p-4 h-100 border-start border-4 border-info">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="fs-2">🧩</span>
+                    <div>
+                        <h4 class="fw-bold neon-text-cyan mb-0">Dependency Injection</h4>
+                        <small class="opacity-50">Patrón de Diseño</small>
+                    </div>
+                </div>
+                <p class="opacity-75 small mb-2">ASP.NET Core usa un contenedor de inyección de dependencias incorporado. El <code>RoomService</code> se registra como <strong>Singleton</strong>, lo cual garantiza que existe una única instancia compartida en toda la aplicación.</p>
+                <ul class="small opacity-75">
+                    <li>El Hub de SignalR recibe el servicio por constructor automáticamente.</li>
+                    <li>Facilita testing unitario por desacoplamiento.</li>
+                    <li>Tiempo de vida: <strong>Singleton &gt; Scoped &gt; Transient</strong>.</li>
+                </ul>
             </div>
         </div>
     </div>
 
+    <!-- SECCION 2: TIEMPO REAL -->
+    <h5 class="text-uppercase tracking-wide opacity-50 mb-4 border-bottom border-light border-opacity-10 pb-3">⚡ COMUNICACIÓN EN TIEMPO REAL</h5>
+    <div class="glass-inner p-4 mb-4 border-start border-4 border-warning" style="background: rgba(255, 251, 0, 0.03);">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <span class="fs-1">📡</span>
+            <div>
+                <h3 class="fw-bold neon-text-yellow mb-0">Microsoft SignalR</h3>
+                <small class="opacity-50">WebSockets Abstractos en Tiempo Real</small>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <h6 class="text-warning fw-bold">¿Qué hace?</h6>
+                <p class="small opacity-75">SignalR abre un canal bidireccional persistente entre el servidor y cada cliente. Cuando un jugador dice un color, el servidor lo valida y envía la orden del turno siguiente a <strong>todos los navegadores a la vez</strong>.</p>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-warning fw-bold">Transporte: WebSockets</h6>
+                <p class="small opacity-75">A diferencia del HTTP clásico (petición → respuesta), los WebSockets mantienen el canal abierto. El servidor <em>empuja</em> datos al navegador, sin necesidad de que el cliente solicite actualizaciones periódicamente (polling).</p>
+            </div>
+            <div class="col-md-4">
+                <h6 class="text-warning fw-bold">GameHub — El corazón</h6>
+                <p class="small opacity-75">La clase <code>GameHub.cs</code> hereda de <code>Hub</code> y expone métodos como <code>SubmitColor()</code> y <code>StartGame()</code>. Los clientes los invocan remotamente y el hub reenvía el resultado a un grupo de sala.</p>
+                <div class="mt-2 p-2 rounded" style="background: rgba(0,0,0,0.3); font-family: monospace; font-size: 0.75rem; color: #fffb00;">
+                    Clients.Group(code)<br/>.SendAsync("NextTurn", ...)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCION 3: ESTADO -->
+    <h5 class="text-uppercase tracking-wide opacity-50 mb-4 border-bottom border-light border-opacity-10 pb-3 mt-5">💾 ESTADO EN MEMORIA</h5>
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="glass-inner p-4 h-100 border-start border-4 border-danger">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="fs-2">🗄️</span>
+                    <div>
+                        <h4 class="fw-bold neon-text-pink mb-0">RoomService (Singleton)</h4>
+                        <small class="opacity-50">Sin base de datos</small>
+                    </div>
+                </div>
+                <p class="opacity-75 small mb-2">Toda la información de salas, jugadores y partidas existe en <strong>RAM solamente</strong> durante la vida del proceso. El <code>RoomService</code> mantiene la lista de todas las salas activas.</p>
+                <ul class="small opacity-75">
+                    <li>Acceso <strong>blindado por <code>lock()</code></strong> para operaciones atómicas thread-safe.</li>
+                    <li>Manejo de entradas/salidas en <code>OnDisconnectedAsync()</code>.</li>
+                    <li>Ventaja: Extremadamente rápido — sin I/O de disco.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="glass-inner p-4 h-100 border-start border-4 border-danger">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <span class="fs-2">🎲</span>
+                    <div>
+                        <h4 class="fw-bold neon-text-pink mb-0">Fisher-Yates Shuffle</h4>
+                        <small class="opacity-50">Algoritmo de Aleatoriedad</small>
+                    </div>
+                </div>
+                <p class="opacity-75 small mb-2">Para asegurar un orden de turnos imparcial al inicio de cada partida, se aplica el algoritmo de barajado <strong>provablemente uniforme</strong> de Fisher-Yates sobre el <code>TurnOrder</code>.</p>
+                <div class="p-2 rounded mt-3" style="background: rgba(0,0,0,0.4); font-family: monospace; font-size: 0.75rem; color: #ff00ea;">
+                    while (n &gt; 1) &#123;<br/>
+                    &nbsp;&nbsp;int k = rng.Next(++n);<br/>
+                    &nbsp;&nbsp;swap(TurnOrder[k], TurnOrder[n]);<br/>
+                    &#125;
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCION 4: FRONTEND -->
+    <h5 class="text-uppercase tracking-wide opacity-50 mb-4 border-bottom border-light border-opacity-10 pb-3">🖥️ FRONTEND E INTERFAZ</h5>
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="glass-inner p-4 h-100">
+                <h5 class="neon-text-cyan fw-bold mb-3">Bootstrap 5</h5>
+                <p class="small opacity-75">Framework CSS responsivo que provee el sistema de grillas <code>flexbox</code> de 12 columnas, clases de utilidad y componentes reutilizables. Usado vía CDN para cero overhead en el build.</p>
+                <div class="mt-3">
+                    <span class="badge border border-light border-opacity-25 text-light me-1 mb-1">Grid System</span>
+                    <span class="badge border border-light border-opacity-25 text-light me-1 mb-1">Badges</span>
+                    <span class="badge border border-light border-opacity-25 text-light me-1 mb-1">Spinners</span>
+                    <span class="badge border border-light border-opacity-25 text-light me-1 mb-1">Alerts</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-inner p-4 h-100">
+                <h5 class="neon-text-cyan fw-bold mb-3">CSS Glassmorphism</h5>
+                <p class="small opacity-75">Estilo visual ultra-moderno basado en:</p>
+                <ul class="small opacity-75 mb-0">
+                    <li><code>backdrop-filter: blur(20px)</code> — efecto de cristal esmerilado.</li>
+                    <li><code>radial-gradient</code> — fondo de malla oscura profunda.</li>
+                    <li><code>text-shadow</code> neón en titulares clave.</li>
+                    <li><code>@keyframes</code> para animaciones de entrada.</li>
+                    <li>Google Fonts: <em>Outfit</em> para tipografía premium.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-inner p-4 h-100">
+                <h5 class="neon-text-cyan fw-bold mb-3">JavaScript (ES6+)</h5>
+                <p class="small opacity-75">Lógica de UI completamente en <code>game.js</code> sin frameworks. Responsable del cliente SignalR, el cronómetro de turnos y la manipulación dinámica del DOM.</p>
+                <ul class="small opacity-75 mb-0">
+                    <li><code>setInterval</code> — Cronómetro MM:SS.d cada 100ms.</li>
+                    <li><code>connection.invoke()</code> — llamadas al Hub de señalR.</li>
+                    <li><code>connection.on()</code> — escucha eventos del servidor.</li>
+                    <li><code>navigator.clipboard</code> — copia de código de sala.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLA RESUMEN -->
+    <h5 class="text-uppercase tracking-wide opacity-50 mb-4 border-bottom border-light border-opacity-10 pb-3">📋 RESUMEN</h5>
+    <div class="table-responsive glass-inner p-0 overflow-hidden mb-5">
+        <table class="table table-borderless align-middle text-light mb-0">
+            <thead style="background: rgba(255,255,255,0.03);">
+                <tr class="border-bottom border-light border-opacity-10">
+                    <th class="ps-4 py-3"><small class="opacity-50">TECNOLOGÍA</small></th>
+                    <th class="py-3"><small class="opacity-50">ROL</small></th>
+                    <th class="pe-4 py-3 text-end"><small class="opacity-50">VERSIÓN</small></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="border-bottom border-light border-opacity-10">
+                    <td class="ps-4 py-3 fw-bold neon-text-cyan">.NET / C#</td>
+                    <td class="py-3 opacity-75">Runtime del servidor y lenguaje principal</td>
+                    <td class="pe-4 py-3 text-end"><span class="badge border border-info text-info">8.0 LTS</span></td>
+                </tr>
+                <tr class="border-bottom border-light border-opacity-10">
+                    <td class="ps-4 py-3 fw-bold neon-text-cyan">ASP.NET Core MVC</td>
+                    <td class="py-3 opacity-75">Enrutamiento y Motor de Vistas (Razor)</td>
+                    <td class="pe-4 py-3 text-end"><span class="badge border border-info text-info">8.0</span></td>
+                </tr>
+                <tr class="border-bottom border-light border-opacity-10">
+                    <td class="ps-4 py-3 fw-bold neon-text-yellow">Microsoft SignalR</td>
+                    <td class="py-3 opacity-75">Comunicación bi-direccional en tiempo real vía WebSockets</td>
+                    <td class="pe-4 py-3 text-end"><span class="badge border border-warning text-warning">8.0.0</span></td>
+                </tr>
+                <tr class="border-bottom border-light border-opacity-10">
+                    <td class="ps-4 py-3 fw-bold text-light">Bootstrap</td>
+                    <td class="py-3 opacity-75">Sistema de diseño responsivo CSS/JS</td>
+                    <td class="pe-4 py-3 text-end"><span class="badge border border-secondary text-light">5.3.2</span></td>
+                </tr>
+                <tr class="border-bottom border-light border-opacity-10">
+                    <td class="ps-4 py-3 fw-bold text-light">JavaScript</td>
+                    <td class="py-3 opacity-75">Lógica de UI, cronómetros y cliente SignalR</td>
+                    <td class="pe-4 py-3 text-end"><span class="badge border border-secondary text-light">ES6+</span></td>
+                </tr>
+                <tr>
+                    <td class="ps-4 py-3 fw-bold text-light">Google Fonts</td>
+                    <td class="py-3 opacity-75">Tipografía premium (Outfit)</td>
+                    <td class="pe-4 py-3 text-end"><span class="badge border border-secondary text-light">CDN</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <div class="text-center mt-4">
-        <a href="@Url.Action("Index", "Home")" class="btn btn-neon-cyan btn-lg px-5 py-3 rounded-pill shadow-sm fw-bold tracking-wide">➔ VOLVER AL MENÚ PRINCIPAL</a>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-neon-cyan btn-lg px-5 py-3 rounded-pill shadow-sm fw-bold tracking-wide">➔ VOLVER AL JUEGO</a>
     </div>
 </div>
