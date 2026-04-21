@@ -1,0 +1,76 @@
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: 'Outfit', sans-serif;
+}
+
+.game-container {
+    border-radius: 1.5rem !important;
+    animation: slideUp 0.5s ease-out forwards;
+}
+
+.tracking-wide {
+    letter-spacing: 0.2rem;
+}
+
+.tracking-widest {
+    letter-spacing: 0.6rem;
+}
+
+.transition-all {
+    transition: all 0.3s ease-in-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.animate-bounce {
+    animation: bounce 2s infinite ease-in-out;
+}
+
+input.form-control:focus {
+    box-shadow: 0 0 0 0.3rem rgba(13,110,253,.15);
+    border-color: #86b7fe;
+}
+
+.code-input {
+    font-size: 1.5rem;
+}
+
+.time-pulse {
+    font-variant-numeric: tabular-nums;
+}
+
+.turn-indicator.bg-warning {
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+    transform: scale(1.02);
+    box-shadow: 0 0.5rem 1rem rgba(255, 193, 7, 0.3) !important;
+}
+
+.turn-indicator.bg-primary {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    color: #495057 !important;
+    transform: scale(1);
+}
+
+.list-group-item {
+    font-size: 1.1rem;
+    padding: 1rem 1.25rem;
+}

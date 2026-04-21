@@ -1,0 +1,152 @@
+@{
+    ViewData["Title"] = "ColorGame Lobby";
+}
+
+<div class="game-container shadow-lg p-4 mx-auto bg-white" style="max-width: 800px; display: none;" id="main-card">
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">ColorGame <span class="text-warning">⚡</span></h1>
+        <p class="text-muted">El juego rápido de pensar colores</p>
+    </div>
+
+    <!-- START SECTIONS -->
+    <div id="section-initial">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 border-primary border-2 shadow-sm rounded-4">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 mb-3">👑</div>
+                        <h4 class="card-title fw-bold mb-3">Crear Sala</h4>
+                        <p class="card-text text-muted small mb-4">Crea una nueva sala y conviértete en el administrador.</p>
+                        <input type="text" id="admin-name" class="form-control form-control-lg text-center mb-3 default-font" placeholder="Tu nombre" />
+                        <button id="btn-create" class="btn btn-primary btn-lg w-100 fw-bold rounded-pill shadow-sm">Crear Sala</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 border-secondary shadow-sm rounded-4 bg-light">
+                    <div class="card-body text-center p-4">
+                        <div class="display-4 mb-3">🎮</div>
+                        <h4 class="card-title fw-bold mb-3">Unirse a Sala</h4>
+                        <p class="card-text text-muted small mb-4">Únete a una sala existente con el código de 6 dígitos.</p>
+                        <input type="text" id="player-name" class="form-control form-control-lg text-center mb-2 default-font" placeholder="Tu nombre" />
+                        <input type="text" id="join-code" class="form-control form-control-lg text-center mb-3 fw-bold tracking-wide code-input" placeholder="000000" maxlength="6" />
+                        <button id="btn-join" class="btn btn-secondary btn-lg w-100 fw-bold rounded-pill shadow-sm">Unirse</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-lobby" class="d-none animate-in">
+        <div class="text-center">
+            <h3 class="fw-bold mb-2">Sala de Juego</h3>
+            <div class="code-display bg-light border p-4 rounded-4 shadow-sm mb-3 d-inline-block position-relative w-100" style="max-width: 400px;">
+                <p class="text-muted small fw-bold text-uppercase mb-1">Código de Acceso</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <span class="display-4 fw-bold tracking-widest text-dark me-2" id="display-room-code">------</span>
+                    <button id="btn-copy" class="btn btn-outline-secondary rounded-circle p-2 shadow-sm" onclick="copyCode()" title="Copiar código">
+                        📋
+                    </button>
+                </div>
+            </div>
+            <p class="text-success small fw-bold" id="copy-feedback" style="opacity: 0; transition: opacity 0.3s; transform: translateY(-10px);">¡Copiado al portapapeles!</p>
+        </div>
+
+        <div class="card border-0 bg-light p-4 rounded-4 mt-2">
+            <h5 class="fw-bold mb-3 text-secondary">Jugadores listos (<span id="player-count">0</span>):</h5>
+            <div id="lobby-players" class="d-flex flex-wrap gap-2 mb-2">
+                <!-- Player badges injected here -->
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <div id="admin-controls" class="d-none">
+                <button id="btn-start" class="btn btn-success btn-lg w-100 fw-bold shadow rounded-pill p-3" disabled>🔥 Iniciar Juego</button>
+                <div class="form-text mt-2 text-muted fw-bold">Esperando al menos 2 jugadores...</div>
+            </div>
+            <div id="player-wait-msg" class="d-none p-3 bg-light rounded-pill border">
+                <div class="spinner-border text-primary spinner-border-sm me-2" role="status"></div>
+                <span class="fw-bold text-secondary">Esperando que el administrador inicie el juego...</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-game" class="d-none animate-in">
+        <div class="text-center mb-4">
+            <div class="turn-indicator rounded-4 p-3 mb-3 shadow transition-all border" id="turn-box">
+                <h4 class="mb-0 fw-bold">Turno de: <span id="current-player-name" class="display-6 fw-bold d-block mt-2">---</span></h4>
+            </div>
+            <div class="display-1 fw-bold font-monospace mt-2 text-dark time-pulse" id="stopwatch">00:00.0</div>
+        </div>
+
+        <div class="row mt-4 g-4">
+            <div class="col-md-7">
+                <div class="card h-100 border-0 shadow-sm rounded-4 bg-light overflow-hidden">
+                    <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
+                        <div id="my-turn-controls" class="d-none">
+                            <h4 class="text-primary fw-bold mb-3">¡Es tu turno, rápido!</h4>
+                            <div class="input-group input-group-lg mb-2 shadow-sm rounded-pill overflow-hidden">
+                                <input type="text" id="color-input" class="form-control border-0 px-4 fw-bold text-center" placeholder="Escribe un color..." />
+                                <button class="btn btn-primary fw-bold px-4" id="btn-submit">Siguiente →</button>
+                            </div>
+                        </div>
+                        <div id="not-my-turn" class="py-4 d-none">
+                            <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+                            <h4 class="text-muted fw-bold">Esperando a <span id="waiting-for-name" class="text-dark">---</span>...</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card h-100 border-0 shadow-sm rounded-4">
+                    <div class="card-header bg-white fw-bold py-3 border-0 rounded-top-4">⏱️ Tiempos (Acumulado)</div>
+                    <ul class="list-group list-group-flush" id="live-scores">
+                        <!-- Scores here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm rounded-4 mt-4">
+            <div class="card-body">
+                <h6 class="fw-bold text-secondary mb-3">🎨 Colores ya mencionados:</h6>
+                <div id="used-colors" class="d-flex flex-wrap gap-2" style="min-height: 40px;">
+                    <!-- Colors injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="section-gameover" class="d-none animate-in text-center py-5">
+        <div class="display-1 animate-bounce mb-3">💥</div>
+        <h1 class="display-4 fw-bold text-danger mb-2">¡<span id="loser-name">---</span> ha perdido!</h1>
+        <h5 class="text-muted mb-4 p-3 bg-light rounded-pill d-inline-block">Motivo: <span class="text-danger fw-bold fs-4 ms-2" id="losing-color">---</span></h5>
+        
+        <div class="card border-0 shadow-sm rounded-4 mx-auto mb-4" style="max-width: 500px;">
+            <div class="card-body p-4">
+                <h5 class="text-muted fw-bold mb-3">Estadísticas Finales</h5>
+                <h3 class="mb-4">Tiempo de juego: <span id="total-game-time" class="text-primary fw-bold">00:00.0</span></h3>
+                
+                <div class="table-responsive">
+                    <table class="table table-borderless align-middle">
+                        <tbody id="final-scores">
+                            <!-- Final scores injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin-reset-controls" class="d-none">
+            <button id="btn-reset" class="btn btn-warning btn-lg fw-bold rounded-pill px-5 shadow">↺ Jugar de Nuevo</button>
+        </div>
+        <div id="player-reset-msg" class="d-none p-3 bg-light border rounded-pill d-inline-block mt-3">
+            <span class="text-muted fw-bold">El administrador puede reiniciar la partida.</span>
+        </div>
+    </div>
+</div>
+
+<div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center z-3 bg-white" style="opacity: 0.95;">
+    <div class="spinner-border text-primary" style="width: 4rem; height: 4rem; border-width: 0.4rem;" role="status"></div>
+    <h3 class="mt-4 text-primary fw-bold">Conectando a la pista...</h3>
+</div>
