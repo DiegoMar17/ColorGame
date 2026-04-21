@@ -286,7 +286,15 @@ connection.on("GameOver", (loserName, losingColor, totalSeconds, scores) => {
         if (isLoser) tr.className = 'glass-inner border-danger bg-danger bg-opacity-10';
         else tr.className = 'border-bottom border-secondary border-opacity-25';
         
-        tr.innerHTML = `<td class="fw-bold fs-5 ps-3 py-3 rounded-start ${isLoser?'text-danger':''}">${i+1}. ${s.name} ${isLoser ? '☠️' : '🏆'}</td><td class="text-end fw-bold fs-5 pe-3 py-3 rounded-end ${isLoser?'text-danger':'neon-text-cyan'}">${formatTime(s.accumulatedSeconds)}</td>`;
+        let colorsHtml = s.colors && s.colors.length > 0 ? s.colors.map(c => 
+            `<span class="badge border border-light border-opacity-25 text-light fs-6 fw-normal px-2 me-1 mb-1" style="background: rgba(255,255,255,0.05)">${c}</span>`
+        ).join('') : '<span class="text-light opacity-50 fst-italic">Ninguno</span>';
+
+        tr.innerHTML = `
+            <td class="fw-bold fs-5 ps-3 py-3 rounded-start ${isLoser?'text-danger':''}">${i+1}. ${s.name} ${isLoser ? '☠️' : '🏆'}</td>
+            <td class="py-3 px-2">${colorsHtml}</td>
+            <td class="text-end fw-bold fs-5 pe-3 py-3 rounded-end ${isLoser?'text-danger':'neon-text-cyan'}">${formatTime(s.accumulatedSeconds)}</td>
+        `;
         tbody.appendChild(tr);
     });
     
