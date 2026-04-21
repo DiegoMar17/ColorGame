@@ -207,22 +207,10 @@ function updateLobbyPlayers(names) {
 connection.on("GameStarted", (firstPlayerName, allPlayerNames) => {
     playerTimes = {};
     allPlayerNames.forEach(n => playerTimes[n] = 0);
-    document.getElementById('used-colors').innerHTML = '';
-    document.getElementById('last-color-display').classList.add('d-none');
     setupTurn(firstPlayerName, true);
 });
 
 connection.on("NextTurn", (nextPlayerName, submittedColor, prevPlayerName) => {
-    if (submittedColor && prevPlayerName) {
-        document.getElementById('last-color-display').classList.remove('d-none');
-        document.getElementById('last-player-name').innerText = prevPlayerName;
-        document.getElementById('last-color').innerText = submittedColor;
-
-        const div = document.createElement('span');
-        div.className = 'badge glass-inner text-light border border-secondary border-opacity-50 fs-6 p-2 px-3 rounded-pill shadow-sm';
-        div.innerHTML = `<span class="neon-text-cyan">${submittedColor}</span> <span class="opacity-50 small ms-1">(${prevPlayerName})</span>`;
-        document.getElementById('used-colors').appendChild(div);
-    }
     setupTurn(nextPlayerName, false);
 });
 
