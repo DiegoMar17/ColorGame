@@ -78,6 +78,9 @@ public class RoomService
         }
     }
 
+    /// <summary>
+    /// Resets the game state for a new round, but preserves TotalPoints and Streaks.
+    /// </summary>
     public void ResetGame(string code)
     {
         lock (_lock)
@@ -89,6 +92,29 @@ public class RoomService
                 foreach (var player in room.Players)
                 {
                     player.AccumulatedSeconds = 0;
+                    // TotalPoints and CurrentStreak are intentionally NOT reset between rounds
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Full reset including points and streaks (used when admin starts a completely new tournament).
+    /// </summary>
+    public void FullReset(string code)
+    {
+        lock (_lock)
+        {
+            var room = GetRoom(code);
+            if (room != null)
+            {
+                room.Game = new GameState();
+                room.CurrentRound = 0;
+                foreach (var player in room.Players)
+                {
+                    player.AccumulatedSeconds = 0;
+                    player.TotalPoints = 0;
+                    player.CurrentStreak = 0;
                 }
             }
         }

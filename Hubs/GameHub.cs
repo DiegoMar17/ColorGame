@@ -35,7 +35,7 @@ public class GameHub : Hub
         await Clients.GroupExcept(room.Code, Context.ConnectionId).SendAsync("PlayerJoined", playerName, playerNames);
     }
 
-    public async Task StartGame(string roomCode)
+    public async Task StartGame(string roomCode, int maxRounds = 3)
     {
         var room = _roomService.GetRoom(roomCode);
         if (room == null || room.Admin?.ConnectionId != Context.ConnectionId) return;
@@ -46,33 +46,34 @@ public class GameHub : Hub
             return;
         }
 
+        // Full reset at the beginning of a tournament
+        _roomService.FullReset(roomCode);
+        room = _roomService.GetRoom(roomCode)!;
+
+        room.MaxRounds = maxRounds;
+        room.CurrentRound = 1;
         room.Game.IsStarted = true;
         room.Game.CurrentPlayerIndex = 0;
 
-        // Populate TurnOrder
+        // Shuffle turn order (Fisher-Yates)
         room.Game.TurnOrder = room.GamePlayers.Select(p => p.ConnectionId).ToList();
-        
-        // Shuffle TurnOrder using Fisher-Yates
         var rng = new Random();
         int n = room.Game.TurnOrder.Count;
-        while (n > 1) {
+        while (n > 1)
+        {
             n--;
             int k = rng.Next(n + 1);
-            var value = room.Game.TurnOrder[k];
-            room.Game.TurnOrder[k] = room.Game.TurnOrder[n];
-            room.Game.TurnOrder[n] = value;
+            (room.Game.TurnOrder[k], room.Game.TurnOrder[n]) = (room.Game.TurnOrder[n], room.Game.TurnOrder[k]);
         }
 
-        // Initialize tracking dictionary
-        foreach(var p in room.GamePlayers) {
+        // Initialize tracking
+        foreach (var p in room.GamePlayers)
             room.Game.PlayerColors[p.Name] = new List<string>();
-        }
 
         var allPlayerNames = room.Players.Select(p => p.Name).ToList();
-        var firstConnectionId = room.Game.TurnOrder[0];
-        var firstPlayerName = room.GamePlayers.First(p => p.ConnectionId == firstConnectionId).Name;
+        var firstPlayerName = room.GamePlayers.First(p => p.ConnectionId == room.Game.TurnOrder[0]).Name;
 
-        await Clients.Group(roomCode).SendAsync("GameStarted", firstPlayerName, allPlayerNames);
+        await Clients.Group(roomCode).SendAsync("GameStarted", firstPlayerName, allPlayerNames, room.CurrentRound, room.MaxRounds);
     }
 
     public async Task SubmitColor(string roomCode, string color, double elapsedSeconds)
@@ -84,43 +85,78 @@ public class GameHub : Hub
 
         var currentConnectionId = room.Game.TurnOrder[room.Game.CurrentPlayerIndex];
         var currentPlayer = room.GamePlayers.FirstOrDefault(p => p.ConnectionId == currentConnectionId);
-        
         if (currentPlayer == null || currentPlayer.ConnectionId != Context.ConnectionId) return;
 
         var normalizedColor = color.Trim().ToLowerInvariant();
         currentPlayer.AccumulatedSeconds += elapsedSeconds;
         room.Game.TotalSeconds += elapsedSeconds;
-
-        // Registrar el color para este jugador
         room.Game.PlayerColors[currentPlayer.Name].Add(color);
 
         if (room.Game.UsedColors.Contains(normalizedColor))
         {
+            // === GAME OVER for this round ===
             room.Game.IsOver = true;
             room.Game.LoserName = currentPlayer.Name;
             room.Game.LosingColor = color;
 
+            // Award points: loser = 0, others = max(1, round(10 - accumulatedSeconds))
+            // Increment streaks for non-losers, reset for loser
+            foreach (var p in room.GamePlayers)
+            {
+                if (p.Name == currentPlayer.Name)
+                {
+                    p.CurrentStreak = 0;
+                    // loser gets 0 points this round
+                }
+                else
+                {
+                    p.CurrentStreak++;
+                    int roundPoints = Math.Max(1, (int)Math.Round(10.0 - p.AccumulatedSeconds));
+                    p.TotalPoints += roundPoints;
+                }
+            }
+
             var scores = room.GamePlayers
-                .OrderBy(p => p.AccumulatedSeconds)
-                .Select(p => new { 
-                    Name = p.Name, 
+                .OrderByDescending(p => p.TotalPoints)
+                .Select(p => new
+                {
+                    Name = p.Name,
                     AccumulatedSeconds = p.AccumulatedSeconds,
-                    Colors = room.Game.PlayerColors.ContainsKey(p.Name) ? room.Game.PlayerColors[p.Name] : new List<string>()
+                    Colors = room.Game.PlayerColors.ContainsKey(p.Name) ? room.Game.PlayerColors[p.Name] : new List<string>(),
+                    TotalPoints = p.TotalPoints,
+                    CurrentStreak = p.CurrentStreak,
+                    RoundPoints = p.Name == currentPlayer.Name ? 0 : Math.Max(1, (int)Math.Round(10.0 - p.AccumulatedSeconds))
                 })
                 .ToList();
 
-            // We can serialize as anonymous objects in SignalR
-            await Clients.Group(roomCode).SendAsync("GameOver", currentPlayer.Name, color, room.Game.TotalSeconds, scores);
+            bool isTournamentOver = room.CurrentRound >= room.MaxRounds;
+
+            if (isTournamentOver)
+            {
+                // Find tournament champion (most points, exclude loser if tied)
+                var champion = room.GamePlayers.OrderByDescending(p => p.TotalPoints).First();
+                var podium = room.GamePlayers
+                    .OrderByDescending(p => p.TotalPoints)
+                    .Select(p => new { Name = p.Name, TotalPoints = p.TotalPoints, CurrentStreak = p.CurrentStreak })
+                    .ToList();
+
+                await Clients.Group(roomCode).SendAsync("TournamentOver", currentPlayer.Name, color, room.Game.TotalSeconds, scores, champion.Name, podium, room.CurrentRound, room.MaxRounds);
+            }
+            else
+            {
+                await Clients.Group(roomCode).SendAsync("GameOver", currentPlayer.Name, color, room.Game.TotalSeconds, scores, room.CurrentRound, room.MaxRounds);
+            }
         }
         else
         {
             room.Game.UsedColors.Add(normalizedColor);
             room.Game.CurrentPlayerIndex = (room.Game.CurrentPlayerIndex + 1) % room.Game.TurnOrder.Count;
-            
             var nextConnectionId = room.Game.TurnOrder[room.Game.CurrentPlayerIndex];
             var nextPlayer = room.GamePlayers.FirstOrDefault(p => p.ConnectionId == nextConnectionId);
 
-            await Clients.Group(roomCode).SendAsync("NextTurn", nextPlayer?.Name, color, currentPlayer.Name);
+            // Pass streaks info on each turn
+            var streaks = room.GamePlayers.Select(p => new { Name = p.Name, Streak = p.CurrentStreak, TotalPoints = p.TotalPoints }).ToList();
+            await Clients.Group(roomCode).SendAsync("NextTurn", nextPlayer?.Name, color, currentPlayer.Name, streaks);
         }
     }
 
@@ -129,9 +165,35 @@ public class GameHub : Hub
         var room = _roomService.GetRoom(roomCode);
         if (room == null || room.Admin?.ConnectionId != Context.ConnectionId) return;
 
+        room.CurrentRound++;
         _roomService.ResetGame(roomCode);
-        var playerNames = room.Players.Select(p => p.Name).ToList();
-        await Clients.Group(roomCode).SendAsync("GameReset", playerNames);
+
+        // Re-shuffle turn order
+        room.Game.TurnOrder = room.GamePlayers.Select(p => p.ConnectionId).ToList();
+        var rng = new Random();
+        int n = room.Game.TurnOrder.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            (room.Game.TurnOrder[k], room.Game.TurnOrder[n]) = (room.Game.TurnOrder[n], room.Game.TurnOrder[k]);
+        }
+
+        foreach (var p in room.GamePlayers)
+            room.Game.PlayerColors[p.Name] = new List<string>();
+
+        room.Game.IsStarted = true;
+        room.Game.CurrentPlayerIndex = 0;
+
+        var firstConnectionId = room.Game.TurnOrder[0];
+        var firstPlayer = room.GamePlayers.First(p => p.ConnectionId == firstConnectionId);
+        var allPlayerNames = room.Players.Select(p => p.Name).ToList();
+        var currentScores = room.GamePlayers
+            .OrderByDescending(p => p.TotalPoints)
+            .Select(p => new { Name = p.Name, TotalPoints = p.TotalPoints, CurrentStreak = p.CurrentStreak })
+            .ToList();
+
+        await Clients.Group(roomCode).SendAsync("GameReset", allPlayerNames, firstPlayer.Name, room.CurrentRound, room.MaxRounds, currentScores);
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)
@@ -144,15 +206,13 @@ public class GameHub : Hub
             {
                 var player = room.Players.FirstOrDefault(p => p.ConnectionId == Context.ConnectionId);
                 bool isAdmin = player?.Role == "Admin";
-                bool isCurrentTurn = room.Game.IsStarted && !room.Game.IsOver && 
-                    room.Game.TurnOrder.Count > 0 && 
+                bool isCurrentTurn = room.Game.IsStarted && !room.Game.IsOver &&
+                    room.Game.TurnOrder.Count > 0 &&
                     room.Game.CurrentPlayerIndex < room.Game.TurnOrder.Count &&
                     room.Game.TurnOrder[room.Game.CurrentPlayerIndex] == Context.ConnectionId;
 
                 if (room.Game.IsStarted)
-                {
                     room.Game.TurnOrder.Remove(Context.ConnectionId);
-                }
 
                 _roomService.RemovePlayerByConnection(Context.ConnectionId);
 
@@ -167,15 +227,11 @@ public class GameHub : Hub
 
                     if (isCurrentTurn && room.Game.TurnOrder.Count > 0 && !room.Game.IsOver)
                     {
-                        // Adjust index if necessary
                         if (room.Game.CurrentPlayerIndex >= room.Game.TurnOrder.Count)
-                        {
                             room.Game.CurrentPlayerIndex = 0;
-                        }
                         var nextConnectionId = room.Game.TurnOrder[room.Game.CurrentPlayerIndex];
                         var nextPlayer = room.Players.FirstOrDefault(p => p.ConnectionId == nextConnectionId);
-                        
-                        await Clients.Group(roomCode).SendAsync("NextTurn", nextPlayer?.Name, "N/A (Desconectado)", player?.Name);
+                        await Clients.Group(roomCode).SendAsync("NextTurn", nextPlayer?.Name, "N/A (Desconectado)", player?.Name, new List<object>());
                     }
                     else if (isCurrentTurn && room.Game.TurnOrder.Count == 0 && !room.Game.IsOver)
                     {
