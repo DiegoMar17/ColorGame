@@ -2,36 +2,32 @@
     ViewData["Title"] = "ColorGame Lobby";
 }
 
-<div class="game-container shadow-lg p-4 mx-auto bg-white" style="max-width: 800px; display: none;" id="main-card">
-    <div class="text-center mb-4">
-        <h1 class="display-5 fw-bold text-primary">ColorGame <span class="text-warning">⚡</span></h1>
-        <p class="text-muted">El juego rápido de pensar colores</p>
+<div class="game-container glass-card p-5 mx-auto" style="max-width: 900px; display: none;" id="main-card">
+    <div class="text-center mb-5">
+        <h1 class="display-3 fw-bold neon-text-cyan tracking-wide mb-2"><i class="text-white opacity-75">COLOR</i>GAME</h1>
+        <p class="text-light opacity-75 fs-5">El juego rápido de pensar colores</p>
     </div>
 
     <!-- START SECTIONS -->
     <div id="section-initial">
         <div class="row g-4">
             <div class="col-md-6">
-                <div class="card h-100 border-primary border-2 shadow-sm rounded-4">
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 mb-3">👑</div>
-                        <h4 class="card-title fw-bold mb-3">Crear Sala</h4>
-                        <p class="card-text text-muted small mb-4">Crea una nueva sala y conviértete en el administrador.</p>
-                        <input type="text" id="admin-name" class="form-control form-control-lg text-center mb-3 default-font" placeholder="Tu nombre" />
-                        <button id="btn-create" class="btn btn-primary btn-lg w-100 fw-bold rounded-pill shadow-sm">Crear Sala</button>
-                    </div>
+                <div class="glass-inner h-100 p-4 text-center">
+                    <div class="display-2 mb-3 neon-text-cyan" style="text-shadow: none;">👑</div>
+                    <h3 class="fw-bold mb-3 text-white">Crear Sala</h3>
+                    <p class="text-light opacity-50 small mb-4">Inicia una sala nueva y sé el administrador.</p>
+                    <input type="text" id="admin-name" class="form-control glass-input form-control-lg text-center mb-4" placeholder="Ingresa tu apodo" />
+                    <button id="btn-create" class="btn btn-neon-cyan btn-lg w-100 fw-bold rounded-pill shadow-sm">CREAR SALA</button>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card h-100 border-secondary shadow-sm rounded-4 bg-light">
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 mb-3">🎮</div>
-                        <h4 class="card-title fw-bold mb-3">Unirse a Sala</h4>
-                        <p class="card-text text-muted small mb-4">Únete a una sala existente con el código de 6 dígitos.</p>
-                        <input type="text" id="player-name" class="form-control form-control-lg text-center mb-2 default-font" placeholder="Tu nombre" />
-                        <input type="text" id="join-code" class="form-control form-control-lg text-center mb-3 fw-bold tracking-wide code-input" placeholder="000000" maxlength="6" />
-                        <button id="btn-join" class="btn btn-secondary btn-lg w-100 fw-bold rounded-pill shadow-sm">Unirse</button>
-                    </div>
+                <div class="glass-inner h-100 p-4 text-center">
+                    <div class="display-2 mb-3 neon-text-pink" style="text-shadow: none;">🎮</div>
+                    <h3 class="fw-bold mb-3 text-white">Unirse a Sala</h3>
+                    <p class="text-light opacity-50 small mb-4">Ingresa el código que te haya pasado un amigo.</p>
+                    <input type="text" id="player-name" class="form-control glass-input form-control-lg text-center mb-3" placeholder="Tu apodo" />
+                    <input type="text" id="join-code" class="form-control glass-input form-control-lg text-center mb-4 fw-bold tracking-widest text-uppercase" placeholder="CÓDIGO" maxlength="6" />
+                    <button id="btn-join" class="btn btn-neon-pink btn-lg w-100 fw-bold rounded-pill shadow-sm">UNIRSE AHORA</button>
                 </div>
             </div>
         </div>
@@ -39,12 +35,13 @@
 
     <div id="section-lobby" class="d-none animate-in">
         <div class="text-center">
-            <h3 class="fw-bold mb-2">Sala de Juego</h3>
-            <div class="code-display bg-light border p-4 rounded-4 shadow-sm mb-3 d-inline-block position-relative w-100" style="max-width: 400px;">
-                <p class="text-muted small fw-bold text-uppercase mb-1">Código de Acceso</p>
+            <h3 class="fw-bold mb-4 text-light">🌟 Sala de Espera</h3>
+            
+            <div class="glass-inner p-4 mb-4 d-inline-block position-relative w-100 mx-auto" style="max-width: 450px;">
+                <p class="text-light opacity-50 small fw-bold text-uppercase mb-2 tracking-wide">Código de Acceso</p>
                 <div class="d-flex justify-content-center align-items-center">
-                    <span class="display-4 fw-bold tracking-widest text-dark me-2" id="display-room-code">------</span>
-                    <button id="btn-copy" class="btn btn-outline-secondary rounded-circle p-2 shadow-sm" onclick="copyCode()" title="Copiar código">
+                    <span class="display-3 fw-bold tracking-widest neon-text-yellow me-3" id="display-room-code">------</span>
+                    <button id="btn-copy" class="btn btn-neon-yellow btn-sm rounded-circle p-3" onclick="copyCode()" title="Copiar código">
                         📋
                     </button>
                 </div>
@@ -52,101 +49,107 @@
             <p class="text-success small fw-bold" id="copy-feedback" style="opacity: 0; transition: opacity 0.3s; transform: translateY(-10px);">¡Copiado al portapapeles!</p>
         </div>
 
-        <div class="card border-0 bg-light p-4 rounded-4 mt-2">
-            <h5 class="fw-bold mb-3 text-secondary">Jugadores listos (<span id="player-count">0</span>):</h5>
-            <div id="lobby-players" class="d-flex flex-wrap gap-2 mb-2">
+        <div class="glass-inner p-4 mt-2">
+            <h5 class="fw-bold mb-3 text-light">Jugadores conectados (<span id="player-count" class="neon-text-cyan">0</span>):</h5>
+            <div id="lobby-players" class="d-flex flex-wrap gap-3 mb-2">
                 <!-- Player badges injected here -->
             </div>
         </div>
 
-        <div class="text-center mt-4">
+        <div class="text-center mt-5">
             <div id="admin-controls" class="d-none">
-                <button id="btn-start" class="btn btn-success btn-lg w-100 fw-bold shadow rounded-pill p-3" disabled>🔥 Iniciar Juego</button>
-                <div class="form-text mt-2 text-muted fw-bold">Esperando al menos 2 jugadores...</div>
+                <button id="btn-start" class="btn btn-neon-cyan btn-lg w-100 fw-bold rounded-pill py-3 text-uppercase" disabled>▶ Iniciar Partida Ahora</button>
+                <div class="form-text mt-3 text-light opacity-50 fw-bold">Mínimo 2 jugadores requeridos en la sala.</div>
             </div>
-            <div id="player-wait-msg" class="d-none p-3 bg-light rounded-pill border">
-                <div class="spinner-border text-primary spinner-border-sm me-2" role="status"></div>
-                <span class="fw-bold text-secondary">Esperando que el administrador inicie el juego...</span>
+            <div id="player-wait-msg" class="d-none p-3 glass-inner rounded-pill d-inline-flex align-items-center">
+                <div class="spinner-grow text-info spinner-grow-sm me-3" role="status"></div>
+                <span class="fw-bold text-light opacity-75">Esperando que el Host inicie el juego...</span>
             </div>
         </div>
     </div>
 
     <div id="section-game" class="d-none animate-in">
-        <div class="text-center mb-4">
-            <div class="turn-indicator rounded-4 p-3 mb-3 shadow transition-all border" id="turn-box">
-                <h4 class="mb-0 fw-bold">Turno de: <span id="current-player-name" class="display-6 fw-bold d-block mt-2">---</span></h4>
+        <div class="text-center mb-5">
+            <div class="turn-indicator glass-inner p-4 mb-4 transition-all" id="turn-box">
+                <h4 class="mb-0 fw-light text-light">TURNO DE</h4>
+                <div id="current-player-name" class="display-4 fw-bold neon-text-cyan mt-1 text-uppercase">---</div>
             </div>
-            <div class="display-1 fw-bold font-monospace mt-2 text-dark time-pulse" id="stopwatch">00:00.0</div>
+            <div class="display-1 fw-bold font-monospace mt-3 text-white time-pulse" style="text-shadow: 0 0 15px rgba(255,255,255,0.3);" id="stopwatch">00:00.0</div>
+
+            <div id="last-color-display" class="glass-inner border-start border-4 border-info d-none mt-4 animate-in mx-auto px-4 py-3 text-start" style="max-width: 600px;">
+                <span class="text-light opacity-75 fs-5">Última jugada: </span><br/>
+                <span class="fs-4"><strong id="last-player-name" class="text-white">---</strong> dijo <strong id="last-color" class="neon-text-pink text-uppercase tracking-wide">---</strong></span>
+            </div>
         </div>
 
-        <div class="row mt-4 g-4">
+        <div class="row mt-5 g-4">
             <div class="col-md-7">
-                <div class="card h-100 border-0 shadow-sm rounded-4 bg-light overflow-hidden">
-                    <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
-                        <div id="my-turn-controls" class="d-none">
-                            <h4 class="text-primary fw-bold mb-3">¡Es tu turno, rápido!</h4>
-                            <div class="input-group input-group-lg mb-2 shadow-sm rounded-pill overflow-hidden">
-                                <input type="text" id="color-input" class="form-control border-0 px-4 fw-bold text-center" placeholder="Escribe un color..." />
-                                <button class="btn btn-primary fw-bold px-4" id="btn-submit">Siguiente →</button>
-                            </div>
+                <div class="glass-inner h-100 p-4 d-flex flex-column justify-content-center text-center">
+                    <div id="my-turn-controls" class="d-none">
+                        <h4 class="neon-text-yellow fw-bold mb-4">¡ESCRIBE RÁPIDO!</h4>
+                        <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden">
+                            <input type="text" id="color-input" class="form-control glass-input px-4 fw-bold text-center text-uppercase p-3" placeholder="COLOR..." />
+                            <button class="btn btn-neon-yellow fw-bold px-4 text-dark" id="btn-submit">ENVIAR ➔</button>
                         </div>
-                        <div id="not-my-turn" class="py-4 d-none">
-                            <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
-                            <h4 class="text-muted fw-bold">Esperando a <span id="waiting-for-name" class="text-dark">---</span>...</h4>
-                        </div>
+                    </div>
+                    <div id="not-my-turn" class="py-4 d-none">
+                        <div class="spinner-border text-info mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+                        <h4 class="text-light opacity-75 fw-bold">El tiempo corre para <span id="waiting-for-name" class="text-white">---</span></h4>
                     </div>
                 </div>
             </div>
             <div class="col-md-5">
-                <div class="card h-100 border-0 shadow-sm rounded-4">
-                    <div class="card-header bg-white fw-bold py-3 border-0 rounded-top-4">⏱️ Tiempos (Acumulado)</div>
-                    <ul class="list-group list-group-flush" id="live-scores">
+                <div class="glass-inner h-100 p-0 overflow-hidden">
+                    <div class="bg-dark bg-opacity-50 fw-bold py-3 px-4 border-bottom border-light border-opacity-10 text-light tracking-wide">⏱ ACUMULADOS</div>
+                    <ul class="list-group list-group-flush bg-transparent" id="live-scores">
                         <!-- Scores here -->
                     </ul>
                 </div>
             </div>
         </div>
         
-        <div class="card border-0 shadow-sm rounded-4 mt-4">
-            <div class="card-body">
-                <h6 class="fw-bold text-secondary mb-3">🎨 Colores ya mencionados:</h6>
-                <div id="used-colors" class="d-flex flex-wrap gap-2" style="min-height: 40px;">
-                    <!-- Colors injected here -->
-                </div>
+        <div class="glass-inner p-4 mt-4">
+            <h6 class="fw-bold text-light opacity-50 mb-3 tracking-wide text-uppercase">🎨 Ya dichos:</h6>
+            <div id="used-colors" class="d-flex flex-wrap gap-2" style="min-height: 40px;">
+                <!-- Colors injected here -->
             </div>
         </div>
     </div>
 
     <div id="section-gameover" class="d-none animate-in text-center py-5">
-        <div class="display-1 animate-bounce mb-3">💥</div>
-        <h1 class="display-4 fw-bold text-danger mb-2">¡<span id="loser-name">---</span> ha perdido!</h1>
-        <h5 class="text-muted mb-4 p-3 bg-light rounded-pill d-inline-block">Motivo: <span class="text-danger fw-bold fs-4 ms-2" id="losing-color">---</span></h5>
+        <div class="display-1 animate-bounce mb-4 text-danger" style="text-shadow: 0 0 30px red;">☠️</div>
+        <h1 class="display-3 fw-bold text-white mb-2">¡<span id="loser-name" class="neon-text-pink text-uppercase">---</span> CAYÓ!</h1>
+        <h5 class="text-light opacity-75 mb-5 mt-4">Motivo de derrota:<br/><span class="d-inline-block mt-3 px-4 py-2 border border-danger rounded-pill neon-text-pink fs-3 tracking-wide bg-danger bg-opacity-10" id="losing-color">---</span></h5>
         
-        <div class="card border-0 shadow-sm rounded-4 mx-auto mb-4" style="max-width: 500px;">
-            <div class="card-body p-4">
-                <h5 class="text-muted fw-bold mb-3">Estadísticas Finales</h5>
-                <h3 class="mb-4">Tiempo de juego: <span id="total-game-time" class="text-primary fw-bold">00:00.0</span></h3>
-                
-                <div class="table-responsive">
-                    <table class="table table-borderless align-middle">
-                        <tbody id="final-scores">
-                            <!-- Final scores injected here -->
-                        </tbody>
-                    </table>
-                </div>
+        <div class="glass-inner p-4 mx-auto mb-5" style="max-width: 600px;">
+            <p class="text-light opacity-50 fw-bold mb-2 tracking-wide text-uppercase">Duración del sufrimiento</p>
+            <h2 class="mb-4 neon-text-cyan fw-bold font-monospace" id="total-game-time">00:00.0</h2>
+            
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle text-light mb-0">
+                    <tbody id="final-scores">
+                        <!-- Final scores injected here -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <div id="admin-reset-controls" class="d-none">
-            <button id="btn-reset" class="btn btn-warning btn-lg fw-bold rounded-pill px-5 shadow">↺ Jugar de Nuevo</button>
+            <button id="btn-reset" class="btn btn-neon-cyan btn-lg fw-bold rounded-pill px-5 shadow-sm">↺ NUEVA PARTIDA</button>
         </div>
-        <div id="player-reset-msg" class="d-none p-3 bg-light border rounded-pill d-inline-block mt-3">
-            <span class="text-muted fw-bold">El administrador puede reiniciar la partida.</span>
+        <div id="player-reset-msg" class="d-none p-3 glass-inner rounded-pill d-inline-block mt-3">
+            <span class="text-light opacity-75 fw-bold">Host debe reiniciar la sala...</span>
         </div>
     </div>
 </div>
 
-<div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center z-3 bg-white" style="opacity: 0.95;">
-    <div class="spinner-border text-primary" style="width: 4rem; height: 4rem; border-width: 0.4rem;" role="status"></div>
-    <h3 class="mt-4 text-primary fw-bold">Conectando a la pista...</h3>
+<div id="global-exit-controls" class="d-none text-center mt-5 mb-4 animate-in">
+    <button class="btn btn-outline-light opacity-50 hover-opacity-100 px-4 py-2 rounded-pill fw-bold transition-all" onclick="exitRoom()">
+        <span class="me-2">✖</span> Abandonar Sala
+    </button>
+</div>
+
+<div id="loading-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center z-3" style="background: #09090b;">
+    <div class="spinner-grow text-info mb-4" style="width: 5rem; height: 5rem;" role="status"></div>
+    <h3 class="text-light tracking-widest fw-bold">LINKING...</h3>
 </div>

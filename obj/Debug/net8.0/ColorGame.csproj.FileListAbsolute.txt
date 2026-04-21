@@ -30,3 +30,4 @@ C:\CTC\SEMESTRE - 3\Programacion 3\JuegoCronometro\ColorGame\obj\Debug\net8.0\re
 C:\CTC\SEMESTRE - 3\Programacion 3\JuegoCronometro\ColorGame\obj\Debug\net8.0\ColorGame.pdb
 C:\CTC\SEMESTRE - 3\Programacion 3\JuegoCronometro\ColorGame\obj\Debug\net8.0\ColorGame.genruntimeconfig.cache
 C:\CTC\SEMESTRE - 3\Programacion 3\JuegoCronometro\ColorGame\obj\Debug\net8.0\ref\ColorGame.dll
+C:\CTC\SEMESTRE - 3\Programacion 3\JuegoCronometro\ColorGame\obj\Debug\net8.0\ColorGame.sourcelink.json

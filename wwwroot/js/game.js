@@ -20,6 +20,12 @@ function showSection(id) {
     document.getElementById(id).classList.remove('d-none');
 }
 
+function exitRoom() {
+    if (confirm("¿Estás seguro de que deseas salir de la sala?")) {
+        location.reload();
+    }
+}
+
 const elLoading = document.getElementById('loading-overlay');
 const elMainCard = document.getElementById('main-card');
 
@@ -160,6 +166,7 @@ connection.on("AdminLeft", () => {
 function setupLobby(playerNames, isAdmin) {
     showSection('section-lobby');
     document.getElementById('display-room-code').innerText = roomCode;
+    document.getElementById('global-exit-controls').classList.remove('d-none');
     
     if (isAdmin) {
         document.getElementById('admin-controls').classList.remove('d-none');
@@ -178,8 +185,8 @@ function updateLobbyPlayers(names) {
     names.forEach((n, idx) => {
         const isAdm = idx === 0;
         const badge = document.createElement('span');
-        badge.className = `badge ${isAdm ? 'bg-primary' : 'bg-white text-dark border shadow-sm'} fs-5 py-2 px-3 rounded-pill`;
-        badge.innerHTML = isAdm ? `👑 ${n}` : `👤 ${n}`;
+        badge.className = `badge ${isAdm ? 'badge-glow border-warning text-warning' : 'glass-inner border text-light'} fs-5 py-2 px-3 rounded-pill`;
+        badge.innerHTML = isAdm ? `👑 ${n}` : `👾 ${n}`;
         list.appendChild(badge);
     });
     document.getElementById('player-count').innerText = names.length;
@@ -201,14 +208,19 @@ connection.on("GameStarted", (firstPlayerName, allPlayerNames) => {
     playerTimes = {};
     allPlayerNames.forEach(n => playerTimes[n] = 0);
     document.getElementById('used-colors').innerHTML = '';
+    document.getElementById('last-color-display').classList.add('d-none');
     setupTurn(firstPlayerName, true);
 });
 
 connection.on("NextTurn", (nextPlayerName, submittedColor, prevPlayerName) => {
     if (submittedColor && prevPlayerName) {
+        document.getElementById('last-color-display').classList.remove('d-none');
+        document.getElementById('last-player-name').innerText = prevPlayerName;
+        document.getElementById('last-color').innerText = submittedColor;
+
         const div = document.createElement('span');
-        div.className = 'badge bg-dark fs-5 p-2 px-3 rounded-pill shadow-sm';
-        div.innerText = `${submittedColor} (${prevPlayerName})`;
+        div.className = 'badge glass-inner text-light border border-secondary border-opacity-50 fs-6 p-2 px-3 rounded-pill shadow-sm';
+        div.innerHTML = `<span class="neon-text-cyan">${submittedColor}</span> <span class="opacity-50 small ms-1">(${prevPlayerName})</span>`;
         document.getElementById('used-colors').appendChild(div);
     }
     setupTurn(nextPlayerName, false);
@@ -224,8 +236,8 @@ function setupTurn(playerName, isFirstTurn) {
     const isMyTurn = myRole === 'Player' && myName === playerName;
     
     if (isMyTurn) {
-        turnBox.classList.remove('bg-primary', 'text-white');
-        turnBox.classList.add('bg-warning', 'text-dark');
+        turnBox.classList.add('active-my-turn');
+        
         document.getElementById('my-turn-controls').classList.remove('d-none');
         document.getElementById('not-my-turn').classList.add('d-none');
         
@@ -234,8 +246,8 @@ function setupTurn(playerName, isFirstTurn) {
         document.getElementById('btn-submit').disabled = false;
         setTimeout(() => input.focus(), 100);
     } else {
-        turnBox.classList.remove('bg-warning', 'text-dark');
-        turnBox.classList.add('bg-primary', 'text-white');
+        turnBox.classList.remove('active-my-turn');
+        
         document.getElementById('my-turn-controls').classList.add('d-none');
         document.getElementById('not-my-turn').classList.remove('d-none');
         document.getElementById('waiting-for-name').innerText = playerName;
@@ -252,8 +264,8 @@ function updateLiveScores() {
         // Skip showing the admin in the time scores since they don't play
         if (myRole === 'Admin' && name === myName) continue; 
         const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center fw-bold text-dark';
-        li.innerHTML = `<span>👤 ${name}</span><span class="badge bg-primary rounded-pill p-2 fs-6 shadow-sm">${formatTime(time)}</span>`;
+        li.className = 'list-group-item d-flex justify-content-between align-items-center fw-bold text-light';
+        li.innerHTML = `<span><span class="opacity-50 me-2">👾</span>${name}</span><span class="badge badge-glow rounded-pill p-2 fs-6">${formatTime(time)}</span>`;
         list.appendChild(li);
     }
 }
@@ -271,8 +283,10 @@ connection.on("GameOver", (loserName, losingColor, totalSeconds, scores) => {
     scores.forEach((s, i) => {
         const isLoser = s.name === loserName;
         const tr = document.createElement('tr');
-        if (isLoser) tr.classList.add('table-danger', 'rounded');
-        tr.innerHTML = `<td class="fw-bold fw-lg fs-5 ps-3 py-3 rounded-start">${i+1}. ${s.name} ${isLoser ? '💥' : '🏆'}</td><td class="text-end fw-bold fs-5 pe-3 py-3 rounded-end">${formatTime(s.accumulatedSeconds)}</td>`;
+        if (isLoser) tr.className = 'glass-inner border-danger bg-danger bg-opacity-10';
+        else tr.className = 'border-bottom border-secondary border-opacity-25';
+        
+        tr.innerHTML = `<td class="fw-bold fs-5 ps-3 py-3 rounded-start ${isLoser?'text-danger':''}">${i+1}. ${s.name} ${isLoser ? '☠️' : '🏆'}</td><td class="text-end fw-bold fs-5 pe-3 py-3 rounded-end ${isLoser?'text-danger':'neon-text-cyan'}">${formatTime(s.accumulatedSeconds)}</td>`;
         tbody.appendChild(tr);
     });
     
