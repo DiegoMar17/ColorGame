@@ -4,30 +4,41 @@
 
 <div class="game-container glass-card p-5 mx-auto" style="max-width: 900px; display: none;" id="main-card">
     <div class="text-center mb-5">
-        <h1 class="display-3 fw-bold neon-text-cyan tracking-wide mb-2"><i class="text-white opacity-75">COLOR</i>GAME</h1>
+        <h1 class="display-3 fw-bold neon-text-cyan tracking-wide mb-2"><i class="text-white opacity-75">CRONO</i>COLOR</h1>
         <p class="text-light opacity-75 fs-5">El juego rápido de pensar colores</p>
     </div>
 
     <!-- START SECTIONS -->
     <div id="section-initial">
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="glass-inner h-100 p-4 text-center">
-                    <div class="display-2 mb-3 neon-text-cyan" style="text-shadow: none;">👑</div>
-                    <h3 class="fw-bold mb-3 text-white">Crear Sala</h3>
-                    <p class="text-light opacity-50 small mb-4">Inicia una sala nueva y sé el administrador.</p>
-                    <input type="text" id="admin-name" class="form-control glass-input form-control-lg text-center mb-4" placeholder="Ingresa tu apodo" />
-                    <button id="btn-create" class="btn btn-neon-cyan btn-lg w-100 fw-bold rounded-pill shadow-sm">CREAR SALA</button>
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <div class="glass-inner p-4 p-md-5 text-center mb-4">
+                    <h3 class="fw-bold mb-4 text-white tracking-wide">CREAR SALA</h3>
+                    <div class="input-group input-group-lg mx-auto shadow-sm" style="max-width: 450px;">
+                        <input type="text" id="admin-name" class="form-control glass-input text-center" placeholder="Ingresa tu apodo" />
+                        <button id="btn-create" class="btn btn-neon-cyan fw-bold px-4">CREAR</button>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="glass-inner h-100 p-4 text-center">
-                    <div class="display-2 mb-3 neon-text-pink" style="text-shadow: none;">🎮</div>
-                    <h3 class="fw-bold mb-3 text-white">Unirse a Sala</h3>
-                    <p class="text-light opacity-50 small mb-4">Ingresa el código que te haya pasado un amigo.</p>
-                    <input type="text" id="player-name" class="form-control glass-input form-control-lg text-center mb-3" placeholder="Tu apodo" />
-                    <input type="text" id="join-code" class="form-control glass-input form-control-lg text-center mb-4 fw-bold tracking-widest text-uppercase" placeholder="CÓDIGO" maxlength="6" />
-                    <button id="btn-join" class="btn btn-neon-pink btn-lg w-100 fw-bold rounded-pill shadow-sm">UNIRSE AHORA</button>
+
+                <div class="d-flex align-items-center my-4 mx-auto" style="max-width: 500px;">
+                    <div class="flex-grow-1 border-bottom border-light border-opacity-25"></div>
+                    <span class="px-4 text-light opacity-50 small tracking-widest text-uppercase">o también puedes</span>
+                    <div class="flex-grow-1 border-bottom border-light border-opacity-25"></div>
+                </div>
+
+                <div class="glass-inner p-4 p-md-5 text-center">
+                    <h3 class="fw-bold mb-4 text-white tracking-wide">UNIRSE A SALA</h3>
+                    <div class="row g-3 justify-content-center mx-auto" style="max-width: 450px;">
+                        <div class="col-12 col-sm-6">
+                            <input type="text" id="player-name" class="form-control glass-input form-control-lg text-center" placeholder="Tu apodo" />
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <input type="text" id="join-code" class="form-control glass-input form-control-lg text-center fw-bold tracking-widest text-uppercase" placeholder="CÓDIGO" maxlength="6" />
+                        </div>
+                        <div class="col-12 mt-4">
+                            <button id="btn-join" class="btn btn-neon-pink btn-lg w-100 fw-bold rounded-pill text-uppercase tracking-wide shadow-sm">Entrar a la partida</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
