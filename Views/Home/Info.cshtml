@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Stack Tecnológico";
+}
+
+<div class="game-container glass-card p-4 p-md-5 mx-auto text-light animate-in mt-4" style="max-width: 850px;">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold neon-text-cyan tracking-wide mb-3">🛠️ STACK TECNOLÓGICO</h1>
+        <p class="text-light opacity-75 fs-5">Las tecnologías que hacen posible la magia interactiva de CronoColor</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="glass-inner p-4 h-100 border-start border-4 border-info">
+                <h4 class="neon-text-cyan fw-bold mb-3">Backend & MVC Core</h4>
+                <ul class="list-unstyled text-light opacity-75">
+                    <li class="mb-3"><strong>.NET 8 & C# 12:</strong> El framework multiplataforma moderno de Microsoft forma el cimiento de la aplicación por su alto rendimiento y tipado fuerte seguro.</li>
+                    <li class="mb-0"><strong>ASP.NET Core MVC:</strong> Sirve como el controlador de rutas y presenta las vistas utilizando Razor Engine de forma ultrarrápida.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="glass-inner p-4 h-100 border-start border-4 border-warning">
+                <h4 class="neon-text-yellow fw-bold mb-3">Lógica en Tiempo Real</h4>
+                <p class="text-light opacity-75"><strong>Microsoft SignalR:</strong> Es el corazón interactivo de CronoColor. Esta librería en base a <em>Transmisión por WebSockets</em> permite gestionar los turnos, generar estados globalizados y compartir tiempos entre jugadores instantáneamente sin recargar la página (Cero sondeos).</p>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="glass-inner p-4 border-start border-4 border-danger">
+                <h4 class="neon-text-pink fw-bold mb-3">Frontend Visual</h4>
+                <p class="text-light opacity-75 mb-3"><strong>Glassmorphism (El estilo "Esmerilado"):</strong> La interfaz renuncia a los diseños plásticos sólidos, aprovechando capacidades de aceleración de renderizado CSS modernas uniendo <em>backdrop-filters</em> para emular desenfoques de cristales sobre un fondo abstracto dinámico.</p>
+                <ul class="mb-0 list-unstyled text-light opacity-75">
+                    <li class="mb-2"><strong>Bootstrap 5:</strong> Sistema responsivo que facilita enormemente el posicionamiento global (Grillas flex).</li>
+                    <li><strong>Vanilla JavaScript (ES6):</strong> Manipulación de subprocesos y cronómetros de reloj exactos para prevenir cuellos de botella en la red. Renderizado asíncrono limpio mediante iteraciones del DOM.</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-12 text-center mt-4">
+            <div class="glass-inner d-inline-block px-4 py-3 border-secondary border-opacity-25" style="background: rgba(255,255,255,0.02)">
+                <span class="fs-5">☁️ No se utiliza base de datos para retener persistencia.</span><br/>
+                <small class="opacity-50">El ciclo de vida del lobby ocurre dentro de la RAM usando un <strong>Servicio Singleton Thread-safe</strong> en el servidor protegido por cláusulas atómicas <kbd>lock ()</kbd>.</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-neon-cyan btn-lg px-5 py-3 rounded-pill shadow-sm fw-bold tracking-wide">➔ VOLVER AL MENÚ PRINCIPAL</a>
+    </div>
+</div>
