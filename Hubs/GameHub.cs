@@ -73,7 +73,7 @@ public class GameHub : Hub
         var allPlayerNames = room.Players.Select(p => p.Name).ToList();
         var firstPlayerName = room.GamePlayers.First(p => p.ConnectionId == room.Game.TurnOrder[0]).Name;
 
-        await Clients.Group(roomCode).SendAsync("GameStarted", firstPlayerName, allPlayerNames, room.CurrentRound, room.MaxRounds);
+        await Clients.Group(roomCode).SendAsync("GameStarted", firstPlayerName, allPlayerNames, room.CurrentRound, room.MaxRounds, room.PersistentUsedColors);
     }
 
     public async Task SubmitColor(string roomCode, string color, double elapsedSeconds)
@@ -92,7 +92,7 @@ public class GameHub : Hub
         room.Game.TotalSeconds += elapsedSeconds;
         room.Game.PlayerColors[currentPlayer.Name].Add(color);
 
-        if (room.Game.UsedColors.Contains(normalizedColor))
+        if (room.Game.UsedColors.Contains(normalizedColor) || room.PersistentUsedColors.Contains(normalizedColor))
         {
             // === GAME OVER for this round ===
             room.Game.IsOver = true;
@@ -154,9 +154,9 @@ public class GameHub : Hub
             var nextConnectionId = room.Game.TurnOrder[room.Game.CurrentPlayerIndex];
             var nextPlayer = room.GamePlayers.FirstOrDefault(p => p.ConnectionId == nextConnectionId);
 
-            // Pass streaks info on each turn
+            // Pass streaks and peristent colors info on each turn
             var streaks = room.GamePlayers.Select(p => new { Name = p.Name, Streak = p.CurrentStreak, TotalPoints = p.TotalPoints }).ToList();
-            await Clients.Group(roomCode).SendAsync("NextTurn", nextPlayer?.Name, color, currentPlayer.Name, streaks);
+            await Clients.Group(roomCode).SendAsync("NextTurn", nextPlayer?.Name, color, currentPlayer.Name, streaks, room.PersistentUsedColors);
         }
     }
 
@@ -193,7 +193,7 @@ public class GameHub : Hub
             .Select(p => new { Name = p.Name, TotalPoints = p.TotalPoints, CurrentStreak = p.CurrentStreak })
             .ToList();
 
-        await Clients.Group(roomCode).SendAsync("GameReset", allPlayerNames, firstPlayer.Name, room.CurrentRound, room.MaxRounds, currentScores);
+        await Clients.Group(roomCode).SendAsync("GameReset", allPlayerNames, firstPlayer.Name, room.CurrentRound, room.MaxRounds, currentScores, room.PersistentUsedColors);
     }
 
     public override async Task OnDisconnectedAsync(Exception? exception)

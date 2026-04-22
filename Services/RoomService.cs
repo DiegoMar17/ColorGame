@@ -88,6 +88,15 @@ public class RoomService
             var room = GetRoom(code);
             if (room != null)
             {
+                // Capture current round colors into the persistent list
+                foreach (var color in room.Game.UsedColors)
+                {
+                    if (!room.PersistentUsedColors.Contains(color))
+                    {
+                        room.PersistentUsedColors.Add(color);
+                    }
+                }
+
                 room.Game = new GameState();
                 foreach (var player in room.Players)
                 {
@@ -110,6 +119,7 @@ public class RoomService
             {
                 room.Game = new GameState();
                 room.CurrentRound = 0;
+                room.PersistentUsedColors.Clear();
                 foreach (var player in room.Players)
                 {
                     player.AccumulatedSeconds = 0;

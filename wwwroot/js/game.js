@@ -13,6 +13,7 @@ let playerTimes = {};
 let playerPoints = {};
 let playerStreaks = {};
 let selectedRounds = 3;
+let persistentUsedColors = [];
 
 const sections = ['section-initial', 'section-lobby', 'section-game', 'section-gameover', 'section-tournament'];
 
@@ -128,6 +129,20 @@ function setupLobby(names, isAdmin) {
     document.getElementById(isAdmin ? 'admin-controls' : 'player-wait-msg').classList.remove('d-none');
     document.getElementById(isAdmin ? 'player-wait-msg' : 'admin-controls').classList.add('d-none');
     updateLobbyPlayers(names);
+    renderBlockedColors();
+}
+
+function renderBlockedColors() {
+    const container = document.getElementById('blocked-colors-container');
+    const list = document.getElementById('blocked-colors-list');
+    if (persistentUsedColors.length > 0) {
+        container.classList.remove('d-none');
+        list.innerHTML = persistentUsedColors.map(c => 
+            `<span class="badge glass-inner text-danger border border-danger border-opacity-25 fs-6 p-2 px-3 rounded-pill shadow-sm text-uppercase">${c}</span>`
+        ).join('');
+    } else {
+        container.classList.add('d-none');
+    }
 }
 
 function updateLobbyPlayers(names) {
@@ -147,17 +162,19 @@ function updateLobbyPlayers(names) {
     }
 }
 
-connection.on("GameStarted", (firstPlayerName, allPlayerNames, currentRound, maxRounds) => {
+connection.on("GameStarted", (firstPlayerName, allPlayerNames, currentRound, maxRounds, blockedColors) => {
     playerTimes = {};
     playerPoints = {};
     playerStreaks = {};
+    persistentUsedColors = blockedColors || [];
     allPlayerNames.forEach(n => { playerTimes[n] = 0; playerPoints[n] = 0; playerStreaks[n] = 0; });
     document.getElementById('round-badge').innerText = currentRound;
     document.getElementById('max-rounds-badge').innerText = maxRounds;
     setupTurn(firstPlayerName, true);
 });
 
-connection.on("NextTurn", (nextPlayerName, submittedColor, prevPlayerName, streaks) => {
+connection.on("NextTurn", (nextPlayerName, submittedColor, prevPlayerName, streaks, blockedColors) => {
+    if (blockedColors) persistentUsedColors = blockedColors;
     if (streaks) {
         streaks.forEach(s => {
             playerStreaks[s.name] = s.streak;
@@ -279,9 +296,10 @@ connection.on("TournamentOver", (loserName, losingColor, totalSeconds, scores, c
     }
 });
 
-connection.on("GameReset", (playerNames, firstPlayerName, currentRound, maxRounds, currentScores) => {
+connection.on("GameReset", (playerNames, firstPlayerName, currentRound, maxRounds, currentScores, blockedColors) => {
     playerTimes = {};
     playerNames.forEach(n => playerTimes[n] = 0);
+    persistentUsedColors = blockedColors || [];
     if (currentScores) currentScores.forEach(s => { playerPoints[s.name] = s.totalPoints; playerStreaks[s.name] = s.currentStreak; });
     document.getElementById('round-badge').innerText = currentRound;
     document.getElementById('max-rounds-badge').innerText = maxRounds;
